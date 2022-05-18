@@ -24,5 +24,4 @@ function calculation(a, b, operation) {
         case '/' :
             return div(a, b);
     }
-
 }
