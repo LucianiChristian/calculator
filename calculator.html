@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="script.js"></script>
     <link rel="stylesheet" href="style.css">
     <title>Calculator</title>
 </head>
@@ -15,36 +14,36 @@
 
     <div class="calculator-housing">
         <div class="calculator-display">
-            <p class="calcuation">1 + 1 = 5</p>
-            <p class="current-input">1</p>
+            <p class="calcuation"></p>
+            <p class="current-input"> </p>
         </div>
         <div class="clear-delete-buttons">
-            <button>CLEAR</button>
-            <button>DELETE</button>
+            <button onclick="clearDisplay()">CLEAR</button>
+            <button onclick="backspaceDisplay()">DELETE</button>
         </div>
         <div class="main-buttons">
-            <button>7</button>
-            <button>8</button>
-            <button>9</button>
-            <button>%</button>
+            <button onclick="updateDisplay('7')">7</button>
+            <button onclick="updateDisplay('8')">8</button>
+            <button onclick="updateDisplay('9')">9</button>
+            <button onclick="updateDisplay(' % ')">%</button>
         </div>
         <div class="main-buttons">
-            <button>4</button>
-            <button>5</button>
-            <button>6</button>
-            <button>*</button>
+            <button onclick="updateDisplay('4')">4</button>
+            <button onclick="updateDisplay('5')">5</button>
+            <button onclick="updateDisplay('6')">6</button>
+            <button onclick="updateDisplay(' * ')">*</button>
         </div>
         <div class="main-buttons">
-            <button>1</button>
-            <button>2</button>
-            <button>3</button>
-            <button>-</button>
+            <button onclick="updateDisplay('1')">1</button>
+            <button onclick="updateDisplay('2')">2</button>
+            <button onclick="updateDisplay('3')">3</button>
+            <button onclick="updateDisplay(' - ')">-</button>
         </div>
         <div class="main-buttons">
-            <button>.</button>
-            <button>0</button>
-            <button>=</button>
-            <button>+</button>
+            <button onclick="updateDisplay('.')">.</button>
+            <button onclick="updateDisplay('0')">0</button>
+            <button onclick="updateDisplay(' = ')">=</button>
+            <button onclick="updateDisplay(' + ')">+</button>
         </div>
     </div>
 
@@ -55,5 +54,6 @@
         </a>
     </footer>
     
+    <script src="script.js"></script>
 </body>
 </html>

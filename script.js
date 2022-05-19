@@ -1,3 +1,5 @@
+let display = '';
+
 // Operator Functions
 function add(a, b) {
     return a + b;
@@ -24,4 +26,33 @@ function calculation(a, b, operation) {
         case '/' :
             return div(a, b);
     }
+}
+
+
+let currentInputDisplay = document.querySelector('.current-input');
+
+// Display Function
+function updateDisplay(buttonInput) {
+    if(display.length == 10) {
+        console.log('Maximum input length reached.');
+        return;
+    }
+
+    display += buttonInput;
+
+    currentInputDisplay.textContent = display;
+}
+
+// Clear Display Function
+function clearDisplay() {
+    display = '';
+
+    currentInputDisplay.textContent = display;
+}
+
+// Delete-Backspace Function
+function backspaceDisplay() {
+    display = display.slice(0, -1);
+
+    currentInputDisplay.textContent = display;
 }
