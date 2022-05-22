@@ -6,9 +6,8 @@ let operand2IsDecimal = false;
 let operators = ['+', '-', '*', '%'];
 
 // Used for calculation(a, b, operation)
-let operand1 = '';
-let operand2 = '';
-let operator = '';
+let calculation = '';
+
 
 // Handles any INPUT button press. Doesn't include clear or delete buttons.
 function inputButtonPress(buttonInput) {
@@ -20,38 +19,49 @@ function inputButtonPress(buttonInput) {
 
 		if(typeof buttonInput === 'number' || buttonInput === '.') {
             currentState = state[1];
-            operand1 += buttonInput;
+            calculation += buttonInput;
 		}
 
-        console.log('Current state : ' + currentState);
-        console.log('Decimal Present? ' + operand1IsDecimal);
-
-		return;
+        test();
 	}
-
     // OPERAND-1 State
-    if(currentState === state[1]) {
+    else if(currentState === state[1]) {
         // prevents 2 decimals
         if(buttonInput === '.' && operand1IsDecimal) {
             return;
         }
-        else if(buttonInput === '.') {
+        
+        if(buttonInput === '.') {
             operand1IsDecimal = true;
         }
 
         if(typeof buttonInput === 'number' || buttonInput === '.') {
-            operand1 += buttonInput;
+            calculation += buttonInput;
 		}
 
         if(operators.includes(buttonInput)) {
             currentState = state[2];
-            operator = buttonInput;
+            calculation += ' ' + buttonInput + ' ';
         }
 
-        console.log("Operand 1 : " + operand1);
-        console.log("Operator : " + operator);
+        test();
+    }
+    // Operator State
+
+}
+
+function test() {
+    console.log('Current State : ' + currentState);
+    console.log('Current Calculation : ' + calculation);
+
+    if(currentState === state[1]) {
+        console.log('Decimal? ' + operand1IsDecimal);
+    }
+    if(currentState === state[3]) {
+        console.log('Decimal? ' + operand2IsDecimal);
     }
 }
+
 
 // Operator Functions
 function add(a, b) {
@@ -67,8 +77,48 @@ function div(a, b) {
     return a / b;
 }
 
+// Clear and Delete Functions
+function clearCalculation() {
+    calculation = '';
+
+    currentState = state[0];
+
+    test();
+}
+function backspaceCalculation() {
+    if(calculation.length <= 1) {
+        calculation = '';
+        operand1IsDecimal = false;
+        currentState = state[0];
+    }
+    else {
+        // store last character of string
+        let removedCharacter = calculation[calculation.length - 1];
+
+        // remove it, returning new string
+        calculation = calculation.slice(0, calculation.length - 1);
+
+        if(removedCharacter === '.') {
+            if(currentState === state[3]) {operand2IsDecimal = false}
+            else if(currentState === state[1]) {operand1IsDecimal = false}
+        }    
+
+        if(removedCharacter === ' ') {
+            calculation = calculation.slice(0, -2);
+
+            if(currentState === state[3]) {
+                currentState = state[2];
+            }
+            else if(currentState === state[2]) {
+                currentState = state[1];
+            }
+        }
+    }
+    test();
+}
+
 // Calculation Function
-function calculation(a, b, operation) {
+function calculate(a, b, operation) {
     switch (operation) {
         case '+' :
             return add(a, b);
