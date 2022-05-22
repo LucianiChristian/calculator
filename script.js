@@ -46,8 +46,67 @@ function inputButtonPress(buttonInput) {
 
         test();
     }
-    // Operator State
+    // OPERATOR State 
+    else if(currentState === state[2]) {
+        if(buttonInput === '.') {
+            operand2IsDecimal = true;
+        }
 
+        if(typeof buttonInput === 'number' || buttonInput === '.') {
+            currentState = state[3];
+            calculation += buttonInput;
+		}
+
+        if(operators.includes(buttonInput)) {
+            calculation = calculation.replace(/[+\-*%]/, buttonInput);
+        }
+
+        test();
+    }
+    // OPERAND-2 State
+    else if(currentState === state[3]) {
+        // prevents 2 decimals
+        if(buttonInput === '.' && operand2IsDecimal) {
+            return;
+        }
+
+        if(buttonInput === '.') {
+            operand2IsDecimal = true;
+        }
+
+        if(typeof buttonInput === 'number' || buttonInput === '.') {
+            calculation += buttonInput;
+		}
+
+        
+        if(buttonInput === '=' || operators.includes(buttonInput)) {
+            // break string
+            let calculationInputs = calculation.split(' ');
+            // pass into calc function
+            calculation = String(calculate(calculationInputs[0], calculationInputs[1], calculationInputs[2]));
+            
+            if(buttonInput === '=') {
+                // go to state[1]
+                currentState = state[1];
+            }
+            else if(operators.includes(buttonInput)) {
+                // go to state[2]
+                currentState = state[2];
+                // add operator to calculation
+                calculation += ' ' + buttonInput + ' ';
+            }
+            
+            operand1IsDecimal = false;
+            operand2IsDecimal = false;
+
+            if(!Number.isInteger(calculation)) {
+                operand1IsDecimal = true;
+            }
+        }
+
+
+        test();
+    } 
 }
 
 function test() {
@@ -62,26 +121,14 @@ function test() {
     }
 }
 
-
-// Operator Functions
-function add(a, b) {
-    return a + b;
-}
-function sub(a, b) {
-    return a - b;
-}
-function mul(a, b) {
-    return a * b;
-}
-function div(a, b) {
-    return a / b;
-}
-
 // Clear and Delete Functions
 function clearCalculation() {
     calculation = '';
 
     currentState = state[0];
+
+    operand1IsDecimal = false;
+    operand2IsDecimal = false;
 
     test();
 }
@@ -99,8 +146,12 @@ function backspaceCalculation() {
         calculation = calculation.slice(0, calculation.length - 1);
 
         if(removedCharacter === '.') {
-            if(currentState === state[3]) {operand2IsDecimal = false}
-            else if(currentState === state[1]) {operand1IsDecimal = false}
+            if(currentState === state[3]) {
+                operand2IsDecimal = false;
+            }
+            else if(currentState === state[1]) {
+                operand1IsDecimal = false;
+            }
         }    
 
         if(removedCharacter === ' ') {
@@ -117,8 +168,27 @@ function backspaceCalculation() {
     test();
 }
 
+// Operator Functions
+function add(a, b) {
+    return a + b;
+}
+function sub(a, b) {
+    return a - b;
+}
+function mul(a, b) {
+    return a * b;
+}
+function div(a, b) {
+    return a / b;
+}
+
+
 // Calculation Function
-function calculate(a, b, operation) {
+function calculate(a, operation, b) {
+    a = Number(a);
+    b = Number(b);
+
+
     switch (operation) {
         case '+' :
             return add(a, b);
