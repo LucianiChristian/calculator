@@ -3,6 +3,8 @@ const state = ['empty', 'operand-1', 'operator', 'operand-2'];
 let currentState = state[0];
 let operand1IsDecimal = false;
 let operand2IsDecimal = false;
+
+// Defines the list of possible operators
 let operators = ['+', '-', '*', '%'];
 
 // Used for calculation(a, b, operation)
@@ -82,7 +84,7 @@ function inputButtonPress(buttonInput) {
         if(buttonInput === '=' || operators.includes(buttonInput)) {
             // break string
             let calculationInputs = calculation.split(' ');
-            // pass into calc function
+            // calculate
             calculation = String(calculate(calculationInputs[0], calculationInputs[1], calculationInputs[2]));
             
             if(buttonInput === '=') {
@@ -96,10 +98,9 @@ function inputButtonPress(buttonInput) {
                 calculation += ' ' + buttonInput + ' ';
             }
             
-            operand1IsDecimal = false;
             operand2IsDecimal = false;
 
-            if(!Number.isInteger(calculation)) {
+            if(!Number.isInteger(Number(calculation))) {
                 operand1IsDecimal = true;
             }
         }
@@ -109,19 +110,7 @@ function inputButtonPress(buttonInput) {
     } 
 }
 
-function test() {
-    console.log('Current State : ' + currentState);
-    console.log('Current Calculation : ' + calculation);
-
-    if(currentState === state[1]) {
-        console.log('Decimal? ' + operand1IsDecimal);
-    }
-    if(currentState === state[3]) {
-        console.log('Decimal? ' + operand2IsDecimal);
-    }
-}
-
-// Clear and Delete Functions
+// Handles CLEAR and DELETE button presses.
 function clearCalculation() {
     calculation = '';
 
@@ -168,18 +157,17 @@ function backspaceCalculation() {
     test();
 }
 
-// Operator Functions
-function add(a, b) {
-    return a + b;
-}
-function sub(a, b) {
-    return a - b;
-}
-function mul(a, b) {
-    return a * b;
-}
-function div(a, b) {
-    return a / b;
+// Provides testing information in the console.
+function test() {
+    console.log('Current State : ' + currentState);
+    console.log('Current Calculation : ' + calculation);
+
+    if(currentState === state[1]) {
+        console.log('Decimal? ' + operand1IsDecimal);
+    }
+    if(currentState === state[3]) {
+        console.log('Decimal? ' + operand2IsDecimal);
+    }
 }
 
 
@@ -199,6 +187,19 @@ function calculate(a, operation, b) {
         case '%' :
             return div(a, b);
     }
+}
+// Operator Functions
+function add(a, b) {
+    return a + b;
+}
+function sub(a, b) {
+    return a - b;
+}
+function mul(a, b) {
+    return a * b;
+}
+function div(a, b) {
+    return a / b;
 }
 
 
