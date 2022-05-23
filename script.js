@@ -10,6 +10,11 @@ let operators = ['+', '-', '*', '%'];
 // Used for calculation(a, b, operation)
 let calculation = '';
 
+// Used to modify calcuator display
+const display = document.querySelector('.calculator-display');
+function updateDisplay() {
+    display.textContent = calculation;
+}
 
 // Handles any INPUT button press. Doesn't include clear or delete buttons.
 function inputButtonPress(buttonInput) {
@@ -22,8 +27,9 @@ function inputButtonPress(buttonInput) {
 		if(typeof buttonInput === 'number' || buttonInput === '.') {
             currentState = state[1];
             calculation += buttonInput;
+            updateDisplay();
 		}
-
+        
         test();
 	}
     // OPERAND-1 State
@@ -39,11 +45,13 @@ function inputButtonPress(buttonInput) {
 
         if(typeof buttonInput === 'number' || buttonInput === '.') {
             calculation += buttonInput;
+            updateDisplay();
 		}
 
         if(operators.includes(buttonInput)) {
             currentState = state[2];
             calculation += ' ' + buttonInput + ' ';
+            updateDisplay();
         }
 
         test();
@@ -57,10 +65,12 @@ function inputButtonPress(buttonInput) {
         if(typeof buttonInput === 'number' || buttonInput === '.') {
             currentState = state[3];
             calculation += buttonInput;
+            updateDisplay();
 		}
 
         if(operators.includes(buttonInput)) {
             calculation = calculation.replace(/[+\-*%]/, buttonInput);
+            updateDisplay();
         }
 
         test();
@@ -78,6 +88,7 @@ function inputButtonPress(buttonInput) {
 
         if(typeof buttonInput === 'number' || buttonInput === '.') {
             calculation += buttonInput;
+            updateDisplay();
 		}
 
         
@@ -87,15 +98,24 @@ function inputButtonPress(buttonInput) {
             // calculate
             calculation = String(calculate(calculationInputs[0], calculationInputs[1], calculationInputs[2]));
             
+            // Handles division by 0
+            if(calculation == Infinity || calculation == -Infinity) {
+                clearCalculation();
+                display.textContent = 'Only at moments of great serenity is it possible to find the pure, the informationless state of signal zero.';
+                return;
+            }
+
             if(buttonInput === '=') {
                 // go to state[1]
                 currentState = state[1];
+                updateDisplay();
             }
             else if(operators.includes(buttonInput)) {
                 // go to state[2]
                 currentState = state[2];
                 // add operator to calculation
                 calculation += ' ' + buttonInput + ' ';
+                updateDisplay();
             }
             
             operand2IsDecimal = false;
@@ -105,9 +125,9 @@ function inputButtonPress(buttonInput) {
             }
         }
 
-
         test();
     } 
+
 }
 
 // Handles CLEAR and DELETE button presses.
@@ -118,6 +138,8 @@ function clearCalculation() {
 
     operand1IsDecimal = false;
     operand2IsDecimal = false;
+
+    updateDisplay();
 
     test();
 }
@@ -154,6 +176,9 @@ function backspaceCalculation() {
             }
         }
     }
+
+    updateDisplay();
+
     test();
 }
 
