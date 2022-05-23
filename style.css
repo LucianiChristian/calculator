@@ -3,7 +3,6 @@ header, footer {
     background-color: #ff000061;
 }
 
-
 * {
     padding: 0;
     margin: 0;
@@ -16,6 +15,10 @@ body {
     justify-content: space-between;
 
     min-height: 100vh;
+}
+
+body, button {
+    font-family: 'Orbitron', sans-serif;
 }
 
 header {
@@ -41,7 +44,7 @@ footer {
     gap: 20px;
 
     width: 350px;
-    height: 550px;
+    height: 500px;
     padding: 10px;
 
     background-color: rgb(161 161 167 / 65%);
@@ -59,6 +62,7 @@ footer {
         height: 20%;
         padding: 20px;
 
+        font-size: 32px;
         border: 2px solid black;
     }
         .calculation {
