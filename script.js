@@ -18,6 +18,11 @@ function updateDisplay() {
 
 // Handles any INPUT button press. Doesn't include clear or delete buttons.
 function inputButtonPress(buttonInput) {
+    // Lock Calculation To 12 Character Maximum To Prevent Display Overflow
+    if(calculation.length === 9) {
+        return;
+    }
+
     // EMPTY state
     if(currentState === state[0]) {
         if(buttonInput === '.') {
