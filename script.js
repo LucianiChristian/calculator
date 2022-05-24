@@ -30,14 +30,15 @@ function updateDisplay() {
 
 // Handles any INPUT button press. Doesn't include clear or delete buttons.
 function inputButtonPress(buttonInput) {
-    // Lock Calculation To 12 Character Maximum To Prevent Display Overflow
+
+    // Lock Calculation Length To Prevent Display Overflow //
     if(calculation.length === 17) {
         if(buttonInput !== '='){
             return;
         } 
     }
 
-    // EMPTY state
+    // EMPTY state  
     if(currentState === state[0]) {
         if(buttonInput === '.') {
             operand1IsDecimal = true;
@@ -48,7 +49,7 @@ function inputButtonPress(buttonInput) {
             calculation += buttonInput;
             updateDisplay();
 		}
-        
+
         test();
 	}
     // OPERAND-1 State
@@ -167,6 +168,7 @@ function backspaceCalculation() {
     if(calculation.length <= 1) {
         calculation = '';
         operand1IsDecimal = false;
+        operand2IsDecimal = false;
         currentState = state[0];
     }
     else {
@@ -185,13 +187,15 @@ function backspaceCalculation() {
             }
         }    
 
+
+        if(currentState === state[3] && calculation[calculation.length - 1] === ' ') {
+            currentState = state[2];
+            calculation = calculation.slice(0, calculation.length - 1);
+        }
+
         if(removedCharacter === ' ') {
             calculation = calculation.slice(0, -2);
-
-            if(currentState === state[3]) {
-                currentState = state[2];
-            }
-            else if(currentState === state[2]) {
+            if(currentState === state[2]) {
                 currentState = state[1];
             }
         }
@@ -241,13 +245,8 @@ function roundToTwo(number) {
 function test() {
     console.log('Current State : ' + currentState);
     console.log('Current Calculation : ' + calculation);
-
-    if(currentState === state[1]) {
-        console.log('Decimal? ' + operand1IsDecimal);
-    }
-    if(currentState === state[3]) {
-        console.log('Decimal? ' + operand2IsDecimal);
-    }
+    console.log('Operand 1 Decimal? ' + operand1IsDecimal);
+    console.log('Operand 2 Decimal? ' + operand2IsDecimal);
 }
 
 
