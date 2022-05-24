@@ -19,8 +19,10 @@ function updateDisplay() {
 // Handles any INPUT button press. Doesn't include clear or delete buttons.
 function inputButtonPress(buttonInput) {
     // Lock Calculation To 12 Character Maximum To Prevent Display Overflow
-    if(calculation.length === 9) {
-        return;
+    if(calculation.length === 17) {
+        if(buttonInput !== '='){
+            return;
+        } 
     }
 
     // EMPTY state
@@ -104,7 +106,7 @@ function inputButtonPress(buttonInput) {
             calculation = String(calculate(calculationInputs[0], calculationInputs[1], calculationInputs[2]));
             
             // Handles division by 0
-            if(calculation == Infinity || calculation == -Infinity) {
+            if(calculation == Infinity || calculation == -Infinity || isNaN(calculation)) {
                 clearCalculation();
                 display.textContent = 'Only at moments of great serenity is it possible to find the pure, the informationless state of signal zero.';
                 return;
@@ -127,9 +129,10 @@ function inputButtonPress(buttonInput) {
 
             if(!Number.isInteger(Number(calculation))) {
                 operand1IsDecimal = true;
+                calculation = String(roundToTwo(Number(calculation)));
+                updateDisplay();
             }
         }
-
         test();
     } 
 
@@ -200,6 +203,10 @@ function test() {
     }
 }
 
+// Rounding function for decimals
+function roundToTwo(number) {
+    return +(Math.round(number + "e+2") + "e-2");
+}
 
 // Calculation Function
 function calculate(a, operation, b) {
