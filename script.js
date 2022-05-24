@@ -1,3 +1,15 @@
+// Event Listeners
+const inputButtons = document.querySelectorAll('.main-buttons button');
+const clearButton = document.querySelector('.clear-button');
+const deleteButton = document.querySelector('.delete-button');
+
+inputButtons.forEach(function (button) {
+    // button.addEventListener('click', inputButtonPress(this.textContent));
+    button.addEventListener('click', () => inputButtonPress(button.textContent));
+});
+clearButton.addEventListener('click', clearCalculation);
+deleteButton.addEventListener('click', backspaceCalculation);
+
 // Used to keep track of the current state of calculator
 const state = ['empty', 'operand-1', 'operator', 'operand-2'];
 let currentState = state[0];
@@ -31,7 +43,7 @@ function inputButtonPress(buttonInput) {
             operand1IsDecimal = true;
         }
 
-		if(typeof buttonInput === 'number' || buttonInput === '.') {
+		if(buttonInput.match(/[0-9]/) || buttonInput === '.') {
             currentState = state[1];
             calculation += buttonInput;
             updateDisplay();
@@ -50,7 +62,7 @@ function inputButtonPress(buttonInput) {
             operand1IsDecimal = true;
         }
 
-        if(typeof buttonInput === 'number' || buttonInput === '.') {
+        if(buttonInput.match(/[0-9]/) || buttonInput === '.') {
             calculation += buttonInput;
             updateDisplay();
 		}
@@ -69,7 +81,7 @@ function inputButtonPress(buttonInput) {
             operand2IsDecimal = true;
         }
 
-        if(typeof buttonInput === 'number' || buttonInput === '.') {
+        if(buttonInput.match(/[0-9]/) || buttonInput === '.') {
             currentState = state[3];
             calculation += buttonInput;
             updateDisplay();
@@ -93,7 +105,7 @@ function inputButtonPress(buttonInput) {
             operand2IsDecimal = true;
         }
 
-        if(typeof buttonInput === 'number' || buttonInput === '.') {
+        if(buttonInput.match(/[0-9]/) || buttonInput === '.') {
             calculation += buttonInput;
             updateDisplay();
 		}
@@ -238,8 +250,6 @@ function mul(a, b) {
 function div(a, b) {
     return a / b;
 }
-
-
 
 
 
