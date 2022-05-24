@@ -10,19 +10,19 @@ inputButtons.forEach(function (button) {
 clearButton.addEventListener('click', clearCalculation);
 deleteButton.addEventListener('click', backspaceCalculation);
 
-// Used to keep track of the current state of calculator
+// Keeps track of the current state of calculator.
 const state = ['empty', 'operand-1', 'operator', 'operand-2'];
 let currentState = state[0];
 let operand1IsDecimal = false;
 let operand2IsDecimal = false;
 
-// Defines the list of possible operators
+// Defines the list of possible operators.
 let operators = ['+', '-', '*', '%'];
 
-// Used for calculation(a, b, operation)
+// Holds total calculation string. To be later broken up for calculate(a, b, operation).
 let calculation = '';
 
-// Used to modify calcuator display
+// Modifys calcuator display.
 const display = document.querySelector('.calculator-display');
 function updateDisplay() {
     display.textContent = calculation;
@@ -202,25 +202,7 @@ function backspaceCalculation() {
     test();
 }
 
-// Provides testing information in the console.
-function test() {
-    console.log('Current State : ' + currentState);
-    console.log('Current Calculation : ' + calculation);
-
-    if(currentState === state[1]) {
-        console.log('Decimal? ' + operand1IsDecimal);
-    }
-    if(currentState === state[3]) {
-        console.log('Decimal? ' + operand2IsDecimal);
-    }
-}
-
-// Rounding function for decimals
-function roundToTwo(number) {
-    return +(Math.round(number + "e+2") + "e-2");
-}
-
-// Calculation Function
+// Calculation functions.
 function calculate(a, operation, b) {
     a = Number(a);
     b = Number(b);
@@ -237,7 +219,6 @@ function calculate(a, operation, b) {
             return div(a, b);
     }
 }
-// Operator Functions
 function add(a, b) {
     return a + b;
 }
@@ -249,6 +230,24 @@ function mul(a, b) {
 }
 function div(a, b) {
     return a / b;
+}
+
+// Rounding function for decimals.
+function roundToTwo(number) {
+    return +(Math.round(number + "e+2") + "e-2");
+}
+
+// Provides testing information in the console.
+function test() {
+    console.log('Current State : ' + currentState);
+    console.log('Current Calculation : ' + calculation);
+
+    if(currentState === state[1]) {
+        console.log('Decimal? ' + operand1IsDecimal);
+    }
+    if(currentState === state[3]) {
+        console.log('Decimal? ' + operand2IsDecimal);
+    }
 }
 
 
