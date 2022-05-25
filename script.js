@@ -139,7 +139,7 @@ function inputButtonPress(buttonInput) {
             if(!Number.isInteger(Number(calculation))) {
                 operand1IsDecimal = true;
             }
-
+            
             // Reset Operand2 Decimal Flag
             operand2IsDecimal = false;
 
@@ -155,7 +155,6 @@ function inputButtonPress(buttonInput) {
 
             updateDisplay();
         }
-        
         test();
     }
 
@@ -163,31 +162,31 @@ function inputButtonPress(buttonInput) {
 
 // Handles CLEAR and DELETE button presses.
 function clearCalculation() {
+    // Clears All Data
     calculation = '';
-
-    currentState = state[0];
-
     operand1IsDecimal = false;
     operand2IsDecimal = false;
+
+    currentState = state[0];
 
     updateDisplay();
 
     test();
 }
 function backspaceCalculation() {
+    // Performs A Clear Calculation If Only One Character
     if (calculation.length <= 1) {
-        calculation = '';
-        operand1IsDecimal = false;
-        operand2IsDecimal = false;
-        currentState = state[0];
+        clearCalculation();
     }
+    // Performs A Normal Backspace If Multiple Characters
     else {
-        // store last character of string
+        // Store Last Character Of String For Later Testing
         let removedCharacter = calculation[calculation.length - 1];
-
-        // remove it, returning new string
+        
+        // Remove The Last Character And Store New Calculation
         calculation = calculation.slice(0, calculation.length - 1);
 
+        // Resets Decimal Flag If A Decimal Is Removed
         if (removedCharacter === '.') {
             if (currentState === state[3]) {
                 operand2IsDecimal = false;
@@ -197,22 +196,23 @@ function backspaceCalculation() {
             }
         }
 
-
+        // Handles Backwards Transition From OperandB to Operator 
         if (currentState === state[3] && calculation[calculation.length - 1] === ' ') {
             currentState = state[2];
-            calculation = calculation.slice(0, calculation.length - 1);
         }
 
+        // Handles Removal Of Space-Enclosed Operator
         if (removedCharacter === ' ') {
             calculation = calculation.slice(0, -2);
+            // Handles Backwards Transition From Operator To OperandA
             if (currentState === state[2]) {
                 currentState = state[1];
             }
         }
+
+        updateDisplay();
     }
-
-    updateDisplay();
-
+ 
     test();
 }
 
