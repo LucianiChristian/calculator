@@ -30,7 +30,6 @@ function updateDisplay() {
 
 // Handles any INPUT button press. Doesn't include clear or delete buttons.
 function inputButtonPress(buttonInput) {
-
     // Lock Calculation Length To Prevent Display Overflow //
     if (calculation.length === 17) {
         if (buttonInput !== '=') {
@@ -40,6 +39,10 @@ function inputButtonPress(buttonInput) {
 
     // EMPTY state  
     if (currentState === state[0]) {
+        // 0 Input --> Prevent Input
+        if(buttonInput == 0) {
+            return;
+        }
         // Decimal Input --> Set Decimal Flag
         if (buttonInput === '.') {
             operand1IsDecimal = true;
@@ -83,6 +86,11 @@ function inputButtonPress(buttonInput) {
     }
     // OPERATOR State 
     else if (currentState === state[2]) {
+        // 0 Input --> Prevent Input
+        if(buttonInput == 0) {
+            return;
+        }
+        
         // Decimal Input --> Set Decimal Flag
         if (buttonInput === '.') {
             operand2IsDecimal = true;
