@@ -126,7 +126,9 @@ function inputButtonPress(buttonInput) {
             // Break String Into Calculation Inputs
             let calculationInputs = calculation.split(' ');
             // Calculate Using The Previously Split Inputs
-            calculation = String(calculate(calculationInputs[0], calculationInputs[1], calculationInputs[2]));
+            calculation = calculate(calculationInputs[0], calculationInputs[1], calculationInputs[2]);
+            // Round The Calculation To Two Decimal Places
+            calculation = String(roundToTwo(calculation));
 
             // Handles Division By 0
             if (calculation == Infinity || calculation == -Infinity || isNaN(calculation)) {
