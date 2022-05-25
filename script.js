@@ -32,43 +32,48 @@ function updateDisplay() {
 function inputButtonPress(buttonInput) {
 
     // Lock Calculation Length To Prevent Display Overflow //
-    if(calculation.length === 17) {
-        if(buttonInput !== '='){
+    if (calculation.length === 17) {
+        if (buttonInput !== '=') {
             return;
-        } 
+        }
     }
 
     // EMPTY state  
-    if(currentState === state[0]) {
-        if(buttonInput === '.') {
+    if (currentState === state[0]) {
+        // Decimal Input --> Set Decimal Flag
+        if (buttonInput === '.') {
             operand1IsDecimal = true;
         }
 
-		if(buttonInput.match(/[0-9]/) || buttonInput === '.') {
+        // Number or Decimal Input --> Allow Input, Change State
+        if (buttonInput.match(/[0-9]/) || buttonInput === '.') {
             currentState = state[1];
             calculation += buttonInput;
             updateDisplay();
-		}
+        }
 
         test();
-	}
+    }
     // OPERAND-1 State
-    else if(currentState === state[1]) {
-        // prevents 2 decimals
-        if(buttonInput === '.' && operand1IsDecimal) {
+    else if (currentState === state[1]) {
+        // Decimal Input W/ Decimal Flag On --> Prevent Input
+        if (buttonInput === '.' && operand1IsDecimal) {
             return;
         }
-        
-        if(buttonInput === '.') {
+
+        // Decimal Input W/ Decimal Flag Off --> Set Decimal Flag
+        if (buttonInput === '.') {
             operand1IsDecimal = true;
         }
 
-        if(buttonInput.match(/[0-9]/) || buttonInput === '.') {
+        // Number or Decimal Input --> Allow Input
+        if (buttonInput.match(/[0-9]/) || buttonInput === '.') {
             calculation += buttonInput;
             updateDisplay();
-		}
+        }
 
-        if(operators.includes(buttonInput)) {
+        // Operator Input --> Allow Input, Change State
+        if (operators.includes(buttonInput)) {
             currentState = state[2];
             calculation += ' ' + buttonInput + ' ';
             updateDisplay();
@@ -77,18 +82,21 @@ function inputButtonPress(buttonInput) {
         test();
     }
     // OPERATOR State 
-    else if(currentState === state[2]) {
-        if(buttonInput === '.') {
+    else if (currentState === state[2]) {
+        // Decimal Input --> Set Decimal Flag
+        if (buttonInput === '.') {
             operand2IsDecimal = true;
         }
 
-        if(buttonInput.match(/[0-9]/) || buttonInput === '.') {
+        // Number or Decimal Input --> Allow Input, Change State
+        if (buttonInput.match(/[0-9]/) || buttonInput === '.') {
             currentState = state[3];
             calculation += buttonInput;
             updateDisplay();
-		}
+        }
 
-        if(operators.includes(buttonInput)) {
+        // Operator Input --> Replace Current Operator
+        if (operators.includes(buttonInput)) {
             calculation = calculation.replace(/[+\-*%]/, buttonInput);
             updateDisplay();
         }
@@ -96,58 +104,60 @@ function inputButtonPress(buttonInput) {
         test();
     }
     // OPERAND-2 State
-    else if(currentState === state[3]) {
-        // prevents 2 decimals
-        if(buttonInput === '.' && operand2IsDecimal) {
+    else if (currentState === state[3]) {
+        // Decimal Input W/ Decimal Flag On --> Prevent Input
+        if (buttonInput === '.' && operand2IsDecimal) {
             return;
         }
 
-        if(buttonInput === '.') {
+        // Decimal Input W/ Decimal Flag Off --> Set Decimal Flag
+        if (buttonInput === '.') {
             operand2IsDecimal = true;
         }
 
-        if(buttonInput.match(/[0-9]/) || buttonInput === '.') {
+        // Number or Decimal Input --> Allow Input
+        if (buttonInput.match(/[0-9]/) || buttonInput === '.') {
             calculation += buttonInput;
             updateDisplay();
-		}
+        }
 
-        
-        if(buttonInput === '=' || operators.includes(buttonInput)) {
-            // break string
+        // Equals or Operator --> Evaluate Calculation
+        if (buttonInput === '=' || operators.includes(buttonInput)) {
+            // Break String Into Calculation Inputs
             let calculationInputs = calculation.split(' ');
-            // calculate
+            // Calculate Using The Previously Split Inputs
             calculation = String(calculate(calculationInputs[0], calculationInputs[1], calculationInputs[2]));
-            
-            // Handles division by 0
-            if(calculation == Infinity || calculation == -Infinity || isNaN(calculation)) {
+
+            // Handles Division By 0
+            if (calculation == Infinity || calculation == -Infinity || isNaN(calculation)) {
                 clearCalculation();
                 display.textContent = 'Only at moments of great serenity is it possible to find the pure, the informationless state of signal zero.';
                 return;
             }
-
-            if(buttonInput === '=') {
-                // go to state[1]
-                currentState = state[1];
-                updateDisplay();
-            }
-            else if(operators.includes(buttonInput)) {
-                // go to state[2]
-                currentState = state[2];
-                // add operator to calculation
-                calculation += ' ' + buttonInput + ' ';
-                updateDisplay();
-            }
-            
-            operand2IsDecimal = false;
-
+                 
+            // Calculation Result Is Decimal --> Set Operand1 Decimal Flag
             if(!Number.isInteger(Number(calculation))) {
                 operand1IsDecimal = true;
-                calculation = String(roundToTwo(Number(calculation)));
-                updateDisplay();
             }
+
+            // Reset Operand2 Decimal Flag
+            operand2IsDecimal = false;
+
+            // Equals --> Go To State 1
+            if (buttonInput === '=') {
+                currentState = state[1];
+            }
+            // Operator --> Go To State 2, Append Operator
+            else if (operators.includes(buttonInput)) {
+                currentState = state[2];
+                calculation += ' ' + buttonInput + ' ';
+            }
+
+            updateDisplay();
         }
+        
         test();
-    } 
+    }
 
 }
 
@@ -165,7 +175,7 @@ function clearCalculation() {
     test();
 }
 function backspaceCalculation() {
-    if(calculation.length <= 1) {
+    if (calculation.length <= 1) {
         calculation = '';
         operand1IsDecimal = false;
         operand2IsDecimal = false;
@@ -178,24 +188,24 @@ function backspaceCalculation() {
         // remove it, returning new string
         calculation = calculation.slice(0, calculation.length - 1);
 
-        if(removedCharacter === '.') {
-            if(currentState === state[3]) {
+        if (removedCharacter === '.') {
+            if (currentState === state[3]) {
                 operand2IsDecimal = false;
             }
-            else if(currentState === state[1]) {
+            else if (currentState === state[1]) {
                 operand1IsDecimal = false;
             }
-        }    
+        }
 
 
-        if(currentState === state[3] && calculation[calculation.length - 1] === ' ') {
+        if (currentState === state[3] && calculation[calculation.length - 1] === ' ') {
             currentState = state[2];
             calculation = calculation.slice(0, calculation.length - 1);
         }
 
-        if(removedCharacter === ' ') {
+        if (removedCharacter === ' ') {
             calculation = calculation.slice(0, -2);
-            if(currentState === state[2]) {
+            if (currentState === state[2]) {
                 currentState = state[1];
             }
         }
@@ -213,13 +223,13 @@ function calculate(a, operation, b) {
 
 
     switch (operation) {
-        case '+' :
+        case '+':
             return add(a, b);
-        case '-' :
+        case '-':
             return sub(a, b);
-        case '*' :
+        case '*':
             return mul(a, b);
-        case '%' :
+        case '%':
             return div(a, b);
     }
 }
