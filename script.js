@@ -4,7 +4,6 @@ const clearButton = document.querySelector('.clear-button');
 const deleteButton = document.querySelector('.delete-button');
 
 inputButtons.forEach(function (button) {
-    // button.addEventListener('click', inputButtonPress(this.textContent));
     button.addEventListener('click', () => inputButtonPress(button.textContent));
 });
 clearButton.addEventListener('click', clearCalculation);
@@ -203,8 +202,6 @@ function backspaceCalculation() {
     else {
         // Store Last Character Of String For Later Testing
         let removedCharacter = calculation[calculation.length - 1];
-        console.log('Removed Character: ' + removedCharacter);
-
 
         // Remove The Last Character And Store New Calculation
         calculation = calculation.slice(0, calculation.length - 1);
