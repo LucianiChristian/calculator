@@ -76,7 +76,7 @@ function inputButtonPress(buttonInput) {
         }
 
         // Operator Input --> Allow Input, Change State
-        if (operators.includes(buttonInput)) {
+        if (operators.includes(buttonInput) && calculation !== '.') {
             currentState = state[2];
             calculation += ' ' + buttonInput + ' ';
             updateDisplay();
@@ -130,7 +130,7 @@ function inputButtonPress(buttonInput) {
         }
 
         // Equals or Operator --> Evaluate Calculation
-        if (buttonInput === '=' || operators.includes(buttonInput)) {
+        if ((buttonInput === '=' || operators.includes(buttonInput)) && calculation[calculation.length - 1] !== '.') {
             // Break String Into Calculation Inputs
             let calculationInputs = calculation.split(' ');
             // Calculate Using The Previously Split Inputs
@@ -204,6 +204,11 @@ function backspaceCalculation() {
             else if (currentState === state[1]) {
                 operand1IsDecimal = false;
             }
+        }
+
+        // Removes 0 To The Left Of A Removed Decimal Point
+        if (removedCharacter === '.' && calculation[calculation.length - 1] == 0) {
+            calculation = calculation.slice(0, calculation.length - 1);
         }
 
         // Handles Backwards Transition From OperandB to Operator 
