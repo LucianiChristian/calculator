@@ -31,7 +31,7 @@ function updateDisplay() {
 // Handles any INPUT button press. Doesn't include clear or delete buttons.
 function inputButtonPress(buttonInput) {
     // Lock Calculation Length To Prevent Display Overflow 
-    if (calculation.length === 13) {
+    if (calculation.length >= 13) {
         // = Input --> Allow Evaluation
         if (buttonInput !== '=') {
             return;
