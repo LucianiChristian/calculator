@@ -153,9 +153,12 @@ function inputButtonPress(buttonInput) {
                 return;
             }
                  
-            // Calculation Result Is Decimal --> Set Operand1 Decimal Flag
+            // Set/Reset Operand1 Decimal Flag
             if(!Number.isInteger(Number(calculation))) {
                 operand1IsDecimal = true;
+            }
+            else {
+                operand1IsDecimal = false;
             }
             
             // Reset Operand2 Decimal Flag
