@@ -30,8 +30,9 @@ function updateDisplay() {
 
 // Handles any INPUT button press. Doesn't include clear or delete buttons.
 function inputButtonPress(buttonInput) {
-    // Lock Calculation Length To Prevent Display Overflow //
+    // Lock Calculation Length To Prevent Display Overflow 
     if (calculation.length === 13) {
+        // = Input --> Allow Evaluation
         if (buttonInput !== '=') {
             return;
         }
@@ -59,6 +60,13 @@ function inputButtonPress(buttonInput) {
     }
     // OPERAND-1 State
     else if (currentState === state[1]) {
+        // Handles A '0' As Operand 1 Arrived At From A Previous Calculation
+        if (calculation === '0') {
+            calculation = buttonInput;
+            updateDisplay();
+            return;
+        }
+
         // Decimal Input W/ Decimal Flag On --> Prevent Input
         if (buttonInput === '.' && operand1IsDecimal) {
             return;
